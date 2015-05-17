@@ -1,0 +1,2 @@
+putStr "Hello"
+putStr "Bitch"
