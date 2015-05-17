@@ -1,6 +1,7 @@
 import System.Random
 import Control.Applicative
 import System.Environment
+import Ex08
 
 generateTree :: Int -> IO (BinaryTree Int)
 generateTree 0 = return Leaf
@@ -17,3 +18,6 @@ fac n = fac' 1 n
     fac' :: Int -> Int -> Int
     fac' a 0 = a
     fac' a n = fac' (a * n) (n - 1)
+
+-- main = (parTreeMap fac <$> ((read . head <$> getArgs) >>= generateTree)) >>= (print . sumTree)
+main = (map read <$> getArgs) >>= \[height, depth] -> (parTreeMapWithCutoff depth fac <$> generateTree height) >>= (print . sumTree)
