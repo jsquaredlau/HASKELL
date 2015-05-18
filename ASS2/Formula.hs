@@ -7,15 +7,16 @@ module Formula where
 
 data Formula ts where
   Body   :: Term Bool                     -> Formula ()
-  Forall :: Show a 
+  Forall :: Show a
          => [a] -> (Term a -> Formula as) -> Formula (a, as)
 
 data Term t where
-  -- FIXME: You need to implement the typesafe term representation here.
-  --        This module will NOT compile before you have defined all
-  --        constructors.
-  
-  Name    :: String -> Term t    -- to facilitate pretty printing
+  Con     :: t          -> Term t
+  And     :: Term Bool  -> Term Bool  -> Term Bool
+  Or      :: Term Bool  -> Term Bool  -> Term Bool
+  Smaller :: Term Int   -> Term Int   -> Term Bool
+  Plus    :: Term Int   -> Term Int   -> Term Int
+  Name    :: String     -> Term t    -- to facilitate pretty printing
 
 
 -- Pretty printing formulas
@@ -43,11 +44,14 @@ instance Show (Formula ts) where
 ex1 :: Formula ()
 ex1 = Body (Con True)
 
+ex1a :: Formula ()
+ex1a = Body (Con False)
+
 ex2 :: Formula (Int, ())
 ex2 = Forall [1..10] $ \n ->
         Body $ n `Smaller` (n `Plus` Con 1)
 
 ex3 :: Formula (Bool, (Int, ()))
-ex3 = Forall [False, True] $ \p -> 
-      Forall [0..2] $ \n -> 
+ex3 = Forall [False, True] $ \p ->
+      Forall [0..2] $ \n ->
         Body $ p `Or` (Con 0 `Smaller` n)

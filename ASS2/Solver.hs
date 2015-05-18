@@ -9,15 +9,20 @@ import Formula
 -- ----------------
 
 eval :: Term t -> t
-eval _ = error "FIXME: implement eval"
-eval (Name _) = error "eval: Name"    -- this constructor is not relevant for evaluation
+eval (Con t)        = t
+eval (And x y)      = eval x && eval y
+eval (Or x y)       = eval x || eval y
+eval (Smaller x y)  = eval x < eval y
+eval (Plus x y)     = eval x + eval y
 
 
 -- Checking formulas
 -- -----------------
 
 satisfiable :: Formula ts -> Bool
-satisfiable _ = error "FIXME: implement satisfiable"
+satisfiable (Body t) = eval t
+satisfiable (Forall xs f) = any (satisfiable . f. Con) xs
 
 solutions :: Formula ts -> [ts]
-solutions _ = error "FIXME: implement solutions"
+solutions (Body term) = [() | eval term]
+solutions (Forall xs formula) = [(x, ys) | x <- xs, ys <- solutions(formula(Con x))]
