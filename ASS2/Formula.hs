@@ -53,5 +53,10 @@ ex2 = Forall [1..10] $ \n ->
 
 ex3 :: Formula (Bool, (Int, ()))
 ex3 = Forall [False, True] $ \p ->
-      Forall [0..2] $ \n ->
+      Forall [-1..2] $ \n ->
+        Body $ p `Or` (Con 0 `Smaller` n)
+
+ex4 :: Formula (Bool, (Int, ()))
+ex4 = Forall [True,False] $ \p ->
+      Forall [0..0] $ \n ->
         Body $ p `Or` (Con 0 `Smaller` n)
