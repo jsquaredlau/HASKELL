@@ -24,5 +24,14 @@ satisfiable (Body t) = eval t
 satisfiable (Forall xs f) = any (satisfiable . f. Con) xs
 
 solutions :: Formula ts -> [ts]
-solutions (Body term) = [() | eval term]
-solutions (Forall xs formula) = [(x, ys) | x <- xs, ys <- solutions(formula(Con x))]
+solutions (Body t) = [() | eval t]
+solutions (Forall xs f) = [(x, y) | x <- xs, y <- solutions(f(Con x))]
+
+-- takes element from outer most argument list,
+-- recurse down, pick up elemnt from inner most list
+
+-- Unwrap the formula as many instanes of lambda there are
+-- at the lowest level find solutions for all inputs
+
+-- 2 layers : for each element in outmost argument list, try solve formula with all arguments in second argument list
+-- if that comes out with true then show arguments
