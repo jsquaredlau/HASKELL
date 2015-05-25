@@ -20,12 +20,12 @@ eval (Plus x y)     = eval x + eval y
 -- -----------------
 
 satisfiable :: Formula ts -> Bool
-satisfiable (Body t) = eval t
-satisfiable (Forall xs f) = any (satisfiable . f. Con) xs
+satisfiable (Body t)        = eval t
+satisfiable (Forall xs f)   = any (satisfiable . f. Con) xs
 
 solutions :: Formula ts -> [ts]
-solutions (Body t) = [() | eval t]
-solutions (Forall xs f) = [(x, y) | x <- xs, y <- solutions(f(Con x))]
+solutions (Body t)          = [() | eval t]
+solutions (Forall xs f)     = [(x, y) | x <- xs, y <- solutions(f(Con x))]
 
 -- takes element from outer most argument list,
 -- recurse down, pick up elemnt from inner most list
