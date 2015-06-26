@@ -5,10 +5,12 @@ module Ex05 where
 data Tag where
   Empty :: Tag
   NonEmpty :: Tag
+  HalfEmpty :: Tag
 
 data BinaryTree (a :: Tag) b where
   Leaf   :: BinaryTree Empty b
   Branch :: b -> BinaryTree a b -> BinaryTree a b -> BinaryTree NonEmpty b
+  HalfBranch :: b -> BinaryTree a b -> BinaryTree Empty b -> BinaryTree HalfEmpty b
 
 top :: BinaryTree NonEmpty b -> b
 top (Branch v l r) = v

@@ -1,2 +1,0 @@
-putStr "Hello"
-putStr "Bitch"

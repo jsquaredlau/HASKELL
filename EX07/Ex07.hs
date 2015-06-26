@@ -11,6 +11,11 @@ module Ex07 where
 
 data Nat = Z | S Nat
 
+data Day where
+  Mons :: Day
+  Tues :: Day
+  deriving (Enum, Show, Bounded)
+
 type family (+) (n :: Nat) (m :: Nat) :: Nat
 type instance Z     + m = m
 type instance (S n) + m = S (n + m)
@@ -27,7 +32,7 @@ deriving instance Show a => Show (Vec n a)
 deriving instance Eq a   => Eq   (Vec n a)
 
 headV :: Vec (S n) a -> a
-headV (VCons x v) = x 
+headV (VCons x v) = x
 
 appendV :: Vec n a -> Vec m a -> Vec (n + m) a
 appendV VNil         ys = ys

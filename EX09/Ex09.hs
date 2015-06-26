@@ -18,20 +18,22 @@ treeMap f (Branch v l r) = let v' = f v
 concTreeMap :: (a -> b) -> BinaryTree a -> IO (BinaryTree b)
 concTreeMap f Leaf = return Leaf
 concTreeMap f (Branch v l r) = do
-                                  m1 <- newEmptyMVar
-                                  m2 <- newEmptyMVar
+                                  -- m1 <- newEmptyMVar
+                                  -- m2 <- newEmptyMVar
                                   m3 <- newEmptyMVar
-                                  forkIO $ do
-                                    putMVar m1 (concTreeMap f l)
-                                  forkIO $ do
-                                    putMVar m2 (concTreeMap f r)
-                                  forkIO $ do
-                                    putMVar m3 (f v)
-                                  l' <- takeMVar m1
-                                  r' <- takeMVar m2
+                                  -- forkIO $ do
+                                  --   putMVar m1 (concTreeMap f l)
+                                  -- forkIO $ do
+                                  --   putMVar m2 (concTreeMap f r)
+                                  forkIO $ putMVar m3 (f v)
+                                  -- l' <- takeMVar m1
+                                  -- r' <- takeMVar m2
                                   v' <- takeMVar m3
-                                  l'' <- l'
-                                  r'' <- r'
+                                  -- l'' <- l'
+                                  -- r'' <- r'
+                                  -- v' `seq` l'' `seq` r'' `seq` (return (Branch v' l'' r''))
+                                  l'' <- concTreeMap f l
+                                  r'' <- concTreeMap f r
                                   v' `seq` l'' `seq` r'' `seq` (return (Branch v' l'' r''))
 
 
